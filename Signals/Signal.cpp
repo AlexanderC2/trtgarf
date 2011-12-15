@@ -15,7 +15,9 @@
 #include <TMatrixDSym.h>
 #include <TVectorD.h>
 
+#ifdef USEGSL
 #include <gsl/gsl_spline.h>
+#endif
 
 namespace Signals
 {
@@ -252,6 +254,7 @@ void Signal::CreateBlocks(std::vector<double> Ax,std::vector<double> Ay)
   }
 }
 
+#ifdef USEGSL
 void Signal::CreateCSpline(std::vector<double> Ax,std::vector<double> Ay)
 {
   if(Ax.size()!=Ay.size()) throw "Signal::CreateCSpline : Different number of x and y";
@@ -279,6 +282,7 @@ void Signal::CreateCSpline(std::vector<double> Ax,std::vector<double> Ay)
   gsl_spline_free(spline);
   gsl_interp_accel_free(acc);
 }
+#endif USEGSL
 
 void Signal::CreateConstant(double AValue)
 {

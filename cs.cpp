@@ -130,14 +130,14 @@ int main(int argc,char * argv[])
     leading->GetXaxis()->SetTitleOffset(1.5);
     leading->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
     leading->GetYaxis()->SetTitleOffset(1.5);
-    leading->GetZaxis()->SetTitle("TOHT");
+    leading->GetZaxis()->SetTitle("Leading high treshold bin");
     leading->GetZaxis()->SetTitleOffset(1.2);
     TH2D * trailing=new TH2D("trailing","trailing",10,0,100,10,0,100);
     trailing->GetXaxis()->SetTitle("plateau time/ns");
     trailing->GetXaxis()->SetTitleOffset(1.5);
     trailing->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
     trailing->GetYaxis()->SetTitleOffset(1.5);
-    trailing->GetZaxis()->SetTitle("TOHT");
+    trailing->GetZaxis()->SetTitle("trailing hish threshold bin");
     trailing->GetZaxis()->SetTitleOffset(1.2);
     for(unsigned int time=10;time<100;time+=10)
     {
