@@ -1,22 +1,3 @@
-/*
-   Copyright 2011 Julian Schutsch
-
-   This file is part of TRTGarf
-
-   TRTGarf is free software: you can redistribute it and/or modify
-   it under the terms of the GNU Lesser General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   TRTGarf is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public License
-   along with TRTGarf.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include "Tools/Stream.hpp"
 #include "Signals/Signal.hpp"
 #include "Signals/SignalSet.hpp"
@@ -35,6 +16,7 @@ const unsigned int SignalBinDiv  = 256;
 
 unsigned int leadingb=0;
 unsigned int trailingb=0;
+unsigned int lastbinblock=0;
 
 TCanvas * canvas;
 
@@ -63,9 +45,10 @@ unsigned int ProcessSignal(Signals::Signal& signal,std::string signalid)
   Signals::Rebin lowrebin(3.125);
   Ternary>>disc>>rebin;
   Ternary>>lowdisc>>lowrebin;
-  leadingb=rebin.LeadingBin();
-  trailingb=rebin.TrailingBin();
-  return rebin.FirstBinBlock();
+  leadingb=disc.LeadingBin()*disc.GetSignalBinTime();
+  trailingb=disc.TrailingBin()*disc.GetSignalBinTime();
+  lastbinblock=disc.LastBinBlock()*disc.GetSignalBinTime();
+  return disc.FirstBinBlock()*disc.GetSignalBinTime();
 }
 
 TRandom3 rndmgen(0);
@@ -142,22 +125,29 @@ int main(int argc,char * argv[])
     toht->GetXaxis()->SetTitleOffset(1.5);
     toht->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
     toht->GetYaxis()->SetTitleOffset(1.5);
-    toht->GetZaxis()->SetTitle("TOHT");
+    toht->GetZaxis()->SetTitle("first time over threshold/ns");
     toht->GetZaxis()->SetTitleOffset(1.2);
     TH2D * leading=new TH2D("leading","leading",10,0,100,10,0,100);
     leading->GetXaxis()->SetTitle("plateau time/ns");
     leading->GetXaxis()->SetTitleOffset(1.5);
     leading->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
     leading->GetYaxis()->SetTitleOffset(1.5);
-    leading->GetZaxis()->SetTitle("Leading high treshold bin");
+    leading->GetZaxis()->SetTitle("Leading high treshold time/ns");
     leading->GetZaxis()->SetTitleOffset(1.2);
     TH2D * trailing=new TH2D("trailing","trailing",10,0,100,10,0,100);
     trailing->GetXaxis()->SetTitle("plateau time/ns");
     trailing->GetXaxis()->SetTitleOffset(1.5);
     trailing->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
     trailing->GetYaxis()->SetTitleOffset(1.5);
-    trailing->GetZaxis()->SetTitle("trailing high threshold bin");
+    trailing->GetZaxis()->SetTitle("trailing high threshold time/ns");
     trailing->GetZaxis()->SetTitleOffset(1.2);
+    TH2D * ltoht=new TH2D("ltoht","ltoht",10,0,100,10,0,100);
+    ltoht->GetXaxis()->SetTitle("plateau time/ns");
+    ltoht->GetXaxis()->SetTitleOffset(1.5);
+    ltoht->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
+    ltoht->GetYaxis()->SetTitleOffset(1.5);
+    ltoht->GetZaxis()->SetTitle("last time over threshold/ns");
+    ltoht->GetZaxis()->SetTitleOffset(1.2);
     for(unsigned int time=0;time<100;time+=10)
     {
       for(unsigned int amplitude=10;amplitude<100;amplitude+=10)
@@ -170,6 +160,7 @@ int main(int argc,char * argv[])
         toht->SetBinContent(time/10+1,amplitude/10+1,resulttoht);
         leading->SetBinContent(time/10+1,amplitude/10+1,leadingb);
         trailing->SetBinContent(time/10+1,amplitude/10+1,trailingb);
+        ltoht->SetBinContent(time/10+1,amplitude/10+1,lastbinblock);
       }
     }
     charge->Draw("lego1");
@@ -184,6 +175,9 @@ int main(int argc,char * argv[])
     trailing->Draw("lego1");
     canvas->Update();
     canvas->Print("trailing.pdf");
+    ltoht->Draw("lego1");
+    canvas->Update();
+    canvas->Print("ltoht.pdf");
 //    application.Run(kTRUE);
   }
   catch(const char *e)
