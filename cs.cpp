@@ -1,3 +1,22 @@
+/*
+   Copyright 2011 Julian Schutsch
+
+   This file is part of TRTGarf
+
+   TRTGarf is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Lesser General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   TRTGarf is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public License
+   along with TRTGarf.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "Tools/Stream.hpp"
 #include "Signals/Signal.hpp"
 #include "Signals/SignalSet.hpp"
@@ -137,9 +156,9 @@ int main(int argc,char * argv[])
     trailing->GetXaxis()->SetTitleOffset(1.5);
     trailing->GetYaxis()->SetTitle("plateau amplitude/(fC/0.5ns)");
     trailing->GetYaxis()->SetTitleOffset(1.5);
-    trailing->GetZaxis()->SetTitle("trailing hish threshold bin");
+    trailing->GetZaxis()->SetTitle("trailing high threshold bin");
     trailing->GetZaxis()->SetTitleOffset(1.2);
-    for(unsigned int time=10;time<100;time+=10)
+    for(unsigned int time=0;time<100;time+=10)
     {
       for(unsigned int amplitude=10;amplitude<100;amplitude+=10)
       {
