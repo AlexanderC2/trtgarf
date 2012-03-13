@@ -35,7 +35,7 @@
 #include <TRandom.h>
 #include <TRandom3.h>
 
-#include "boost/filesystem.hpp"
+// #include "boost/filesystem.hpp"
 
 Signals::SignalPairSet signalpairs;
 
@@ -44,12 +44,12 @@ const std::string TopDir="/home/cluster/kn2a1/lu32cud/";
 std::vector<std::string> DestVar;
 std::vector<std::string> SourceVar;
 
-const Real SignalBins   = 64;
-const Real SignalBinDiv = 256;
+const double SignalBins   = 64;
+const double SignalBinDiv = 256;
 
-void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<DWord> ASections)
+void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<unsigned int> ASections)
 {
-  for(DWord i=0;i<ASections.size();++i)
+  for(unsigned int i=0;i<ASections.size();++i)
   {
     Signals::Signal signal(3.125/SignalBinDiv);
     Signals::Signal dest(3.125/SignalBinDiv);
@@ -81,8 +81,8 @@ int main(int argc,char * argv[])
     DestVar.push_back("");
     DestVar.push_back("");
 
-    std::vector<DWord> sections;
-    for(DWord i=0;i<3;++i) sections.push_back(i);
+    std::vector<unsigned int> sections;
+    for(unsigned int i=0;i<3;++i) sections.push_back(i);
     
 /*    LoadSignals(TopDir+"sigs/ScaledSig/",
                 TopDir+"sigs/ASDSigScaled.lis",
@@ -91,14 +91,14 @@ int main(int argc,char * argv[])
                 TopDir+"sigs/ASDSclWtrk_tr.lis",
                 sections);
                 
-    Real Bestd=1e30; TCanvas * canvas=new TCanvas();
+    double Bestd=1e30; TCanvas * canvas=new TCanvas();
     std::cout<<"RUN"<<std::endl;
 
     TRT::ASDBLRDiscriminator discriminator(signalpairs.GetSignalBinTime());
 
     signalpairs.SetPlotScales(1,0.28,0.3,0.3);
     signalpairs.SetPlotColors(kBlack,kCyan,kBlue,kGreen);
-    for(DWord mc=0;mc<10000000;++mc)
+    for(unsigned int mc=0;mc<10000000;++mc)
     {
       discriminator.FThreshold         = 0.0238+0.0005*random->Rndm();
       discriminator.FDCHysteresis      = 0.01+0.03*random->Rndm();
@@ -113,7 +113,7 @@ int main(int argc,char * argv[])
           signalpairs.SetCurrentResult(signalpairs.GetCurrentInput()>>discriminator);
         } while(signalpairs.IterNext());
 
-        Real d=signalpairs.CompareAll();
+        double d=signalpairs.CompareAll();
         if(d<Bestd)
         {
           Bestd = d;

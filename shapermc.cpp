@@ -32,29 +32,29 @@
 #include <TRandom.h>
 #include <TRandom3.h>
 
-#include "boost/filesystem.hpp"
+// #include "boost/filesystem.hpp"
 
 Signals::SignalPairSet signalpairs;
 
 const std::string TopDir="/home/cluster/kn2a1/lu32cud/";
 
-const Real SignalBins   = 64;
-const Real SignalBinDiv = 256;
+const double SignalBins   = 64;
+const double SignalBinDiv = 256;
 
 std::vector<std::string> SourceVar;
 std::vector<std::string> DestVar;
 
-void Show(std::string ADesc,std::vector<Real> & AData)
+void Show(std::string ADesc,std::vector<double> & AData)
 {
-  for(DWord i=0;i<AData.size();++i)
+  for(unsigned int i=0;i<AData.size();++i)
   {
     std::cout<<ADesc<<"["<<i<<"]"<<AData[i]<<std::endl;
   }
 }
 
-void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<DWord> ASections)
+void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<unsigned int> ASections)
 {
-  for(DWord i=0;i<ASections.size();++i)
+  for(unsigned int i=0;i<ASections.size();++i)
   {
     Signals::Signal source(3.125/SignalBinDiv);
     Signals::Signal dest(3.125/SignalBinDiv);
@@ -80,7 +80,7 @@ int main(int argc,char * argv[])
 
     DestVar.push_back("shaper_out");
     
-    std::vector<DWord> sections;
+    std::vector<unsigned int> sections;
     sections.push_back(0);
     sections.push_back(1);
     sections.push_back(2);
@@ -98,7 +98,7 @@ int main(int argc,char * argv[])
     TCanvas * canvas=new TCanvas;
 
     TRandom3 * random  = new TRandom3();
-    Real Bestd=1e30;
+    double Bestd=1e30;
 
     TRT::ASDBLRShaper Shaper(signalpairs.GetSignalBinTime());
 
@@ -116,7 +116,7 @@ int main(int argc,char * argv[])
     Shaper.F2DecayCoefficients.resize(2);
 
     std::cout<<"Init done"<<std::endl;
-    for(DWord mc=0;mc<2000000;mc++)
+    for(unsigned int mc=0;mc<2000000;mc++)
     {
     
       Shaper.F1ScaleCoefficients[0]=0;
@@ -158,7 +158,7 @@ int main(int argc,char * argv[])
           signalpairs.SetCurrentResult(signalpairs.GetCurrentInput()>>Shaper);
 //          signalpairs.SetCurrentExtra1(Shaper.F2LowPass);
         } while(signalpairs.IterNext());
-        Real d=signalpairs.CompareAll();
+        double d=signalpairs.CompareAll();
         if((d<Bestd) || (0))
         {
           std::cout<<std::endl;

@@ -3,7 +3,9 @@ SRCDIR = $(GARFIELD_HOME)/Source
 INCDIR = $(GARFIELD_HOME)/Include
 HEEDDIR = $(GARFIELD_HOME)/Heed
 LIBDIR = $(GARFIELD_HOME)/Library
-ROOT_BASE = ../root
+# Needs to be set to a ROOT base directory
+ROOT_BASE = /usr/root
+BOOST_INCDIR=/usr/include/boost
 
 SRC_STANDARD       = tools.cpp Particles.cpp
 SRC_TOOLS          = $(wildcard Tools/*.cpp)
@@ -36,17 +38,16 @@ CFLAGS = -Wall -Wextra -Wno-long-long -pedantic \
 	-I$(INCDIR) -I$(HEEDDIR) -I. \
 	-I$(BOOST_INCDIR) \
 	-I. \
-	-I../libssh/include \
-        -I../root/include \
+        -I$(ROOT_BASE)/include \
 	-D USEROOT \
 	$(GSL_INC) -c
 
 # Debug flags
-LDFLAGS = `${ROOT_BASE}/bin/root-config --glibs` 
-LDFLAGS += -lGeom -lm -Wall
+LDFLAGS = `${ROOT_BASE}/bin/root-config --glibs`
+LDFLAGS += -lGeom -lm -Wall -lboost_filesystem -lboost_program_options
 LDFLAGS += -L$(LIBDIR)
 LDGARFFLAGS = $(LDFLAGS) -lGarfield -lgfortran
-LDGARFSSHFLAGS = $(LDFLAGS) -lGarfield -L../libssh/build/src -lssh
+LDGARFSSHFLAGS = $(LDFLAGS) -lGarfield -lssh
 
 all: $(PRG_BASIC)
 

@@ -32,7 +32,7 @@
 #include <TRandom.h>
 #include <TRandom3.h>
 
-#include "boost/filesystem.hpp"
+// #include "boost/filesystem.hpp"
 
 
 const std::string TopDir="/home/cluster/kn2a1/lu32cud/";
@@ -40,14 +40,14 @@ const std::string TopDir="/home/cluster/kn2a1/lu32cud/";
 std::vector<std::string> DestVar;
 std::vector<std::string> SourceVar;
 
-const Real SignalBins   = 64;
-const Real SignalBinDiv = 256;
+const double SignalBins   = 64;
+const double SignalBinDiv = 256;
 
 Signals::SignalPairSet signalpairs;
 
-void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<DWord> ASections)
+void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<unsigned int> ASections)
 {
-  for(DWord i=0;i<ASections.size();++i)
+  for(unsigned int i=0;i<ASections.size();++i)
   {
     Signals::Signal signal(3.125/SignalBinDiv);
     Signals::Signal dest(3.125/SignalBinDiv);
@@ -71,7 +71,7 @@ int main(int argc,char * argv[])
     SourceVar.push_back("blr_out");
     DestVar.push_back("trkdisc");
 
-    std::vector<DWord> sections;
+    std::vector<unsigned int> sections;
     sections.push_back(0);
     sections.push_back(1);
     sections.push_back(2);
@@ -80,7 +80,7 @@ int main(int argc,char * argv[])
                 TopDir+"sigs/ASDSigScaled.lis",
                 sections);
                 
-    Real Bestd=1e30; TCanvas * canvas=new TCanvas();
+    double Bestd=1e30; TCanvas * canvas=new TCanvas();
     std::cout<<"RUN"<<std::endl;
 
     Signals::HighPass DiscIntegratorLow(3.125/SignalBinDiv);
@@ -93,7 +93,7 @@ int main(int argc,char * argv[])
     signalpairs.SetPlotScales(1,5,5);
     signalpairs.SetPlotColors(kBlack,kCyan,kBlue);
 
-    for(DWord mc=0;mc<10000000;++mc)
+    for(unsigned int mc=-1;mc<10000000;++mc)
     {
       DiscIntegratorLow.FDeltaCoefficients[1] = 5E-3*random->Rndm();
       DiscIntegratorLow.FDecayCoefficients[1] = 5E-3*random->Rndm();
@@ -105,7 +105,7 @@ int main(int argc,char * argv[])
         {
           signalpairs.SetCurrentResult(signalpairs.GetCurrentInput()>>DiscIntegratorLow);
         } while(signalpairs.IterNext());
-        Real d=signalpairs.CompareAll();
+        double d=signalpairs.CompareAll();
         if(d<Bestd)
         {
           Bestd=d;

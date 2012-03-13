@@ -30,6 +30,8 @@
 #include <TCanvas.h>
 #include <TStyle.h>
 
+#include <stdlib.h>
+
 const unsigned int SignalBins    = 256;
 const unsigned int SignalBinDiv  = 256;
 

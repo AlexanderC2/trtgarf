@@ -29,6 +29,8 @@
 #include <iostream>
 #include <TCanvas.h>
 
+#include <stdlib.h>
+
 const unsigned int SignalBins    = 64;
 const unsigned int SignalBinDiv  = 256;
 

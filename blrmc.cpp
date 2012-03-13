@@ -34,7 +34,7 @@
 #include <TRandom.h>
 #include <TRandom3.h>
 
-#include "boost/filesystem.hpp"
+// #include "boost/filesystem.hpp"
 
 Signals::SignalPairSet signalpairs;
 
@@ -43,12 +43,12 @@ const std::string TopDir="/home/cluster/kn2a1/lu32cud/";
 std::vector<std::string> DestVar;
 std::vector<std::string> SourceVar;
 
-const Real SignalBins   = 64;
-const Real SignalBinDiv = 256;
+const double SignalBins   = 64;
+const double SignalBinDiv = 256;
 
-void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<DWord> ASections)
+void LoadSignals(std::string ASignalIncPath,std::string ASignalLis,std::vector<unsigned int> ASections)
 {
-  for(DWord i=0;i<ASections.size();++i)
+  for(unsigned int i=0;i<ASections.size();++i)
   {
     Signals::Signal signal(3.125/SignalBinDiv);
     Signals::Signal dest(3.125/SignalBinDiv);
@@ -72,7 +72,7 @@ int main(int argc,char * argv[])
     SourceVar.push_back("shaper_out");
     DestVar.push_back("blr_out");
 
-    std::vector<DWord> sections;
+    std::vector<unsigned int> sections;
     sections.push_back(0);
     sections.push_back(1);
     sections.push_back(2);
@@ -83,7 +83,7 @@ int main(int argc,char * argv[])
 
     TRT::ASDBLRBaselineRestorer BaselineRestorer(3.125/SignalBinDiv);
 
-    Real Bestd=1e30;
+    double Bestd=1e30;
     TCanvas * canvas=new TCanvas();
     BaselineRestorer.FTopStateCoefficients.resize(3);
     BaselineRestorer.FTopDiffCoefficients.resize(3);
@@ -93,7 +93,7 @@ int main(int argc,char * argv[])
     signalpairs.SetPlotScales(1,1,1);
     signalpairs.SetPlotColors(kBlack,kCyan,kBlue);
 
-    for(DWord mc=0;mc<10000000;++mc)
+    for(unsigned int mc=0;mc<10000000;++mc)
     {
       BaselineRestorer.FTopStateCoefficients[0]    = 0;
       BaselineRestorer.FTopStateCoefficients[1]    = (-4E-4-2E-4*random->Rndm());
@@ -117,7 +117,7 @@ int main(int argc,char * argv[])
         {
           signalpairs.SetCurrentResult(signalpairs.GetCurrentInput()>>BaselineRestorer);
         } while(signalpairs.IterNext());
-        Real d=signalpairs.CompareAll();
+        double d=signalpairs.CompareAll();
         if(d<Bestd)
         {
           Bestd=d;

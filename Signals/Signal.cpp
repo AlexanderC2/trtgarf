@@ -314,7 +314,7 @@ void Signal::CreateCSpline(std::vector<double> Ax,std::vector<double> Ay)
   gsl_spline_free(spline);
   gsl_interp_accel_free(acc);
 }
-#endif USEGSL
+#endif
 
 void Signal::CreateConstant(double AValue)
 {

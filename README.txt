@@ -8,6 +8,14 @@ Required Libraries:
     Signal processing with the ASDBLR may requires a working Spice (currently HSpice) if
      signals tested are not within ordinary boundaries (low threshold, single particle ionisation)
 
+    A working boost installation is required.
+
+Necessary updates to the makefile:
+
+    Please ensure that ROOT_BASE and BOOST_INCDIR are set properly.
+    No linking directory is passed for BOOST_INCDIR assuming BOOST
+    is installed in /usr/lib or any other default directory.
+
 Provided C++ class libraries:
 
   Signals
